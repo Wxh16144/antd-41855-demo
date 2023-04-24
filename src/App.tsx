@@ -1,19 +1,28 @@
-import React from 'react'
+import React from "react";
+import { Button } from "antd";
+import request from "./util/request";
 
 function App() {
-  const [count, setCount] = React.useState(0)
+  const [loading, setLoading] = React.useState(false);
+
+  const loadData = async () => {
+    setLoading(true);
+    
+    try {
+      await request("https://api.tvmaze.com/search/show");
+      throw new Error("test error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="App">
-      <h2>{count}</h2>
-      <button
-        type="button"
-        onClick={() => setCount(prevCount => prevCount + 1)}
-      >
-        click me
-      </button>
-    </div >
-  )
+      <Button loading={loading} onClick={loadData}>
+        Load Data
+      </Button>
+    </div>
+  );
 }
 
-export default App
+export default App;
